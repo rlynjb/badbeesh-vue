@@ -1,25 +1,27 @@
 <script lang="ts">
-import { nanoid } from 'nanoid'
 import { toRaw } from 'vue'
 // @ts-ignore
 // fix https://stackoverflow.com/a/55576119
 import { debounce } from 'lodash'
+
+import {
+  type ISelfCare,
+  SelfCare
+} from '../models/ISelfCare'
+import {
+  getFoods,
+  createFood,
+  updateFood,
+} from '../datasources/localstorage'
 //import Food from '../components/Food'
 
 
-interface IFood {
-  id?: string,
-  timestamp?: number,
-  name?: string,
-  calorie?: string,
+interface IFood extends ISelfCare {
+  calorie?: string
 }
-class FoodBase implements IFood {
-  public id: string = nanoid()
-  public timestamp: number = Date.now()
-  public name: string = ''
+class Food extends SelfCare {
   public calorie: string = ''
 }
-class Food extends FoodBase {}
 
 export default {
   data() {
@@ -33,20 +35,26 @@ export default {
   mounted() {
     this.food = new Food()
 
-    this.getData()
+    getFoods().then(res => {
+      this.foods = res
+    })
 
     // ref: https://stackoverflow.com/a/75374781
-    this.postData = debounce(this.postData, 3000)
+    this.createResolver = debounce(this.createResolver, 3000)
   },
 
   methods: {
-    create($event: any, field: string) {
+    createResolver($event: any, field: string) {
       let val = $event.target.value
       this.food[field as keyof typeof this.food] = val
-      this.postData()
+  
+      this.foods.push(toRaw(this.food))
+      this.food = new Food()
+
+      createFood(this.foods)
     },
 
-    update($event: any, field: string, id?: string) {
+    updateResolver($event: any, field: string, id: any) {
       let val = $event.target.value
       let existFood = toRaw(this.foods).findIndex((i: IFood) => i.id === id)
       this.foods[existFood][field as keyof typeof this.food] = val
@@ -66,34 +74,14 @@ export default {
       }
       */
       
-      this.updateData()
+      updateFood(this.foods)
     },
 
-    getData() {
-      let data = localStorage.getItem("food")
-      if (data) {
-        this.foods = JSON.parse(data)
-      }
-    },
-
-    postData() {
-      this.foods.push(toRaw(this.food))
-      this.food = new Food()
-
-      localStorage.setItem("food", JSON.stringify(this.foods))
-    },
-
-    updateData() {
-      // replace localstorage item with new array
-      localStorage.removeItem("food")
-      localStorage.setItem("food", JSON.stringify(this.foods))
-    },
-
-    deleteData(id: string) {
+    deleteResolver(id: any) {
       let existFood = toRaw(this.foods).findIndex((i: IFood) => i.id === id)
       this.foods.splice(existFood, 1)
 
-      this.updateData()
+      updateFood(this.foods)
     },
   },
 }
@@ -115,17 +103,17 @@ export default {
               placeholder="Food name"
               type="text"
               :value="foodItem.name"
-              @input="update($event, 'name', foodItem.id)"
+              @input="updateResolver($event, 'name', foodItem.id)"
             />
             <input
               class="text-black"
               placeholder="Calorie"
               type='text'
               :value="foodItem.calorie"
-              @input="update($event, 'calorie', foodItem.id)"
+              @input="updateResolver($event, 'calorie', foodItem.id)"
             />
             <button class="ml-3"
-              @click="deleteData(foodItem.id)"
+              @click="deleteResolver(foodItem.id)"
             >
               X
             </button>
@@ -139,14 +127,14 @@ export default {
           placeholder="Food name"
           type="text"
           :value="food.name"
-          @input="create($event, 'name')"
+          @input="createResolver($event, 'name')"
         />
         <input
           class="text-black"
           placeholder="Calorie"
           type='text'
           :value="food.calorie"
-          @input="create($event, 'calorie')"
+          @input="createResolver($event, 'calorie')"
         />
       </div>
     </div>
