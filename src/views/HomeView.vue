@@ -17,7 +17,7 @@ export default {
 </script>
 
 <template>
-  <main class="p-4">
+  <main class="container w-6/12">
     <div class="grid grid-cols-4 gap-4">
       <div class="col-span-4">
         <h3 class="text-xl">Food diary</h3>

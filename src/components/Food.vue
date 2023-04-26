@@ -82,54 +82,64 @@ export default {
 
       updateFood(this.foods)
     },
+
+    convertTimestamp(val?: number) {
+      return new Date(val).toLocaleString()
+    },
   },
 }
 </script>
 
 <template>
-  <main class="grid cols-span-4">
-    <ul class="col-span-4">
-      <li v-for="(foodItem, foodIndex) in foods" :key="'food'+foodIndex">
-        <div class="col-span-4">
-          <!-- move this to its own composable or component -->
-          <input
-            class="text-black"
-            placeholder="Food name"
-            type="text"
-            :value="foodItem.name"
-            @input="updateResolver($event, 'name', foodItem.id)"
-          />
-          <input
-            class="text-black"
-            placeholder="Calorie"
-            type='text'
-            :value="foodItem.calorie"
-            @input="updateResolver($event, 'calorie', foodItem.id)"
-          />
-          <button class="ml-3"
-            @click="deleteResolver(foodItem.id)"
-          >
-            X
-          </button>
+  <main class="grid grid-cols-4">
+    <ul class="col-span-4 mb-4">
+      <li v-for="(foodItem, foodIndex) in foods" :key="'food'+foodIndex"
+        class="grid grid-cols-12"
+      >
+        <div class="col-span-3 text-xs">
+          {{ convertTimestamp(foodItem.timestamp) }}
         </div>
+        <!-- move this to its own composable or component -->
+        <input
+          class="text-black col-span-4"
+          placeholder="Food name"
+          type="text"
+          :value="foodItem.name"
+          @input="updateResolver($event, 'name', foodItem.id)"
+        />
+        <input
+          class="text-black col-span-4"
+          placeholder="Calorie"
+          type='text'
+          :value="foodItem.calorie"
+          @input="updateResolver($event, 'calorie', foodItem.id)"
+        />
+        <button class="ml-3 col-span-1"
+          @click="deleteResolver(foodItem.id)"
+        >
+          X
+        </button>
+      </li>
+
+      <li class="grid grid-cols-12 mt-2">
+        <div class="col-span-3 text-xs">
+        </div>
+        <input
+          class="text-black col-span-4"
+          placeholder="Food name"
+          type="text"
+          :value="food.name"
+          @input="createResolver($event, 'name')"
+        />
+        <input
+          class="text-black col-span-4"
+          placeholder="Calorie"
+          type='text'
+          :value="food.calorie"
+          @input="createResolver($event, 'calorie')"
+        />
       </li>
     </ul>
 
-    <div class="col-span-4">
-      <input
-        class="text-black"
-        placeholder="Food name"
-        type="text"
-        :value="food.name"
-        @input="createResolver($event, 'name')"
-      />
-      <input
-        class="text-black"
-        placeholder="Calorie"
-        type='text'
-        :value="food.calorie"
-        @input="createResolver($event, 'calorie')"
-      />
-    </div>
   </main>
 </template>
