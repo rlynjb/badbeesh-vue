@@ -93,7 +93,7 @@ export default {
         {
           name: 'calorie',
           placeholder: 'calorie',
-          size: '2',
+          size: '3',
         }
       ],
       totalCalories: 0,

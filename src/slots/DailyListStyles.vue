@@ -26,17 +26,17 @@ export default {
 .daily-list-ul li {
   @apply grid grid-cols-12;
 }
-.daily-list--timestamp {
-  @apply col-span-3 text-xs;
+.daily-list--timestamp,
+.daily-list--new .spacer {
+  @apply col-span-2;
+  font-size: 0.7em;
+  line-height: 1;
 }
 
 .daily-list--style-scope button {
   @apply ml-3 col-span-1;
   font-weight: 800;
   color: #868686;
-}
-.daily-list--new .spacer {
-  @apply col-span-3;
 }
 
 .daily-list--style-scope input[type='text'] {
