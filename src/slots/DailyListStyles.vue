@@ -28,7 +28,7 @@ export default {
 }
 .daily-list--timestamp,
 .daily-list--new .spacer {
-  @apply col-span-2;
+  @apply col-span-2 pt-2;
   font-size: 0.7em;
   line-height: 1;
 }

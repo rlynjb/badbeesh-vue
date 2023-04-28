@@ -1,6 +1,6 @@
 <template>
   <main class="daily-list">
-    <h4>Total Daily Calories: {{ totalCalories }}</h4>
+    <h4 class="mb-4">Total Daily Calories: <b>{{ totalCalories }}</b></h4>
     <DailyListStyles :name="name">
       <div v-if="fields.length" class="daily-list-container">
         <ul class="daily-list-ul">
@@ -59,7 +59,7 @@ import {
   type ISelfCare,
   SelfCare
 } from '../models/ISelfCare'
-
+import { useTotalDailyCalorie } from '../composables/useTotalDailyCalorie'
 
 import {
   getFoods,
@@ -73,6 +73,8 @@ interface IFood extends ISelfCare {
 class DefaultValue extends SelfCare {
   public calorie: string = ''
 }
+
+let { calculateCalories, totalCalories } = useTotalDailyCalorie()
 
 export default {
   components: {
@@ -96,7 +98,12 @@ export default {
           size: '3',
         }
       ],
-      totalCalories: 0,
+    }
+  },
+
+  computed: {
+    totalCalories() {
+      return totalCalories.value
     }
   },
 
@@ -105,8 +112,7 @@ export default {
 
     getFoods().then(res => {
       this.items = res
-
-      this.calculateDailyCalories()
+      calculateCalories(this.items)
     })
 
     // ref: https://stackoverflow.com/a/75374781
@@ -144,7 +150,7 @@ export default {
       */
       
       updateFood(this.items)
-        .then(r => this.calculateDailyCalories())
+        .then(r => calculateCalories(this.items))
     },
 
     deleteResolver(id: any) {
@@ -157,21 +163,6 @@ export default {
     convertTimestamp(val?: number) {
       // fix: https://stackoverflow.com/a/57062363
       return new Date(val!).toLocaleString()
-    },
-
-    calculateDailyCalories() {
-      let todaysDate = new Date().toLocaleDateString()
-      let totalCalories = 0;
-
-      let filterFoodsByDate = toRaw(this.items)
-        .filter((r: any) => {
-          return new Date(r.timestamp).toLocaleDateString('en-US') === todaysDate
-        })
-        .forEach((r: any) => {
-          totalCalories += parseInt(r.calorie)
-        })
-
-      this.totalCalories = totalCalories
     },
   },
 }
