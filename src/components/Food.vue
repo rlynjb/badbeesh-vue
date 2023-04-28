@@ -1,9 +1,9 @@
 <template>
   <main class="daily-list">
-    <DailyListStyles name="food">
+    <DailyListStyles :name="name">
       <div v-if="fields.length" class="daily-list-container">
         <ul class="daily-list-ul">
-          <li v-for="(foodItem, foodIndex) in foods" :key="'food'+foodIndex">
+          <li v-for="(foodItem, foodIndex) in items" :key="'food'+foodIndex">
             <div class="daily-list--timestamp">
               {{ convertTimestamp(foodItem.timestamp) }}
             </div>
@@ -37,7 +37,7 @@
               <input
                 :placeholder="field.placeholder"
                 type="text"
-                :value="food[field.name as keyof typeof food]"
+                :value="item[field.name as keyof typeof item]"
                 @input="createResolver($event, field.name)"
               />
             </div>
@@ -54,21 +54,22 @@
 import { debounce } from 'lodash'
 import { toRaw } from 'vue'
 import DailyListStyles from '../slots/DailyListStyles.vue'
+import {
+  type ISelfCare,
+  SelfCare
+} from '../models/ISelfCare'
+
 
 import {
   getFoods,
   createFood,
   updateFood,
 } from '../datasources/localstorage'
-import {
-  type ISelfCare,
-  SelfCare
-} from '../models/ISelfCare'
 
 interface IFood extends ISelfCare {
   calorie?: string
 }
-class Food extends SelfCare {
+class DefaultValue extends SelfCare {
   public calorie: string = ''
 }
 
@@ -79,8 +80,9 @@ export default {
   data() {
     return {
       //idLookup: {} as any,
-      food: {} as IFood,
-      foods: [] as IFood[],
+      name: 'food',
+      item: {} as IFood,
+      items: [] as IFood[],
       fields: [
         {
           name: 'name',
@@ -97,10 +99,10 @@ export default {
   },
 
   mounted() {
-    this.food = new Food()
+    this.item = new DefaultValue()
 
     getFoods().then(res => {
-      this.foods = res
+      this.items = res
     })
 
     // ref: https://stackoverflow.com/a/75374781
@@ -110,17 +112,17 @@ export default {
   methods: {
     createResolver($event: any, field: string) {
       let val = $event.target.value
-      this.food[field as keyof typeof this.food] = val
-      this.foods.push(toRaw(this.food))
-      this.food = new Food()
+      this.item[field as keyof typeof this.item] = val
+      this.items.push(toRaw(this.item))
+      this.item = new DefaultValue()
 
-      createFood(this.foods)
+      createFood(this.items)
     },
 
     updateResolver($event: any, field: string, id: any) {
       let val = $event.target.value
-      let existFood = toRaw(this.foods).findIndex((i: IFood) => i.id === id)
-      this.foods[existFood][field as keyof typeof this.food] = val
+      let existFood = toRaw(this.items).findIndex((i: IFood) => i.id === id)
+      this.items[existFood][field as keyof typeof this.item] = val
 
       /*
         TODO
@@ -137,14 +139,14 @@ export default {
       }
       */
       
-      updateFood(this.foods)
+      updateFood(this.items)
     },
 
     deleteResolver(id: any) {
-      let existFood = toRaw(this.foods).findIndex((i: IFood) => i.id === id)
-      this.foods.splice(existFood, 1)
+      let existFood = toRaw(this.items).findIndex((i: IFood) => i.id === id)
+      this.items.splice(existFood, 1)
 
-      updateFood(this.foods)
+      updateFood(this.items)
     },
 
     convertTimestamp(val?: number) {
