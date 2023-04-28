@@ -17,12 +17,30 @@ export default {
 </script>
 
 <template>
-  <main class="container w-6/12">
-    <div class="grid grid-cols-4 gap-4">
+  <main class="home-view">
+    <section class="display-board">
+      <h3 class="subtitle">Total Daily Calories</h3>
+    </section>
+
+    <section class="grid grid-cols-4 gap-4">
       <div class="col-span-4">
-        <h3 class="text-xl">Food diary</h3>
+        <h3 class="subtitle">Food diary</h3>
       </div>
       <Food class="col-span-4" />
-    </div>
+    </section>
   </main>
 </template>
+
+<style lang="postcss" scoped>
+.home-view {
+  @apply container w-6/12;
+}
+.home-view section {
+  @apply mb-4 p-4;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+}
+.home-view .subtitle {
+  @apply text-xl mb-4;
+}
+</style>

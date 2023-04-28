@@ -41,6 +41,7 @@ export default {
 
 .daily-list--style-scope input[type='text'] {
   @apply text-black w-full;
+
   font-size: 0.9em;
   background-color: #1f1f1f;
   color: #868686;
