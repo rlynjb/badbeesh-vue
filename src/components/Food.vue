@@ -1,87 +1,69 @@
 <template>
-  <main class="">
-    <div v-if="fields.length" class="grid grid-cols-4">
-      <ul class="col-span-4 mb-4">
-        <li v-for="(foodItem, foodIndex) in foods" :key="'food'+foodIndex"
-          class="grid grid-cols-12"
-        >
-          <div class="col-span-3 text-xs">
-            {{ convertTimestamp(foodItem.timestamp) }}
-          </div>
+  <main class="daily-list">
+    <DailyListStyles name="food">
+      <div v-if="fields.length" class="daily-list-container">
+        <ul class="daily-list-ul">
+          <li v-for="(foodItem, foodIndex) in foods" :key="'food'+foodIndex">
+            <div class="daily-list--timestamp">
+              {{ convertTimestamp(foodItem.timestamp) }}
+            </div>
 
-          <!--
-            there is an issue with tailwind tree shaking when setting dynamic css
-            to fix: https://stackoverflow.com/questions/72356953/how-to-use-dynamic-class-of-tailwindcss-like-this-in-project-of-vue3-and-vite
-          -->
-          <div v-for="(field, fieldIndex) in fields" :key="'updateField'+fieldIndex"
-            :class="'col-span-'+field.size"
-          >
-            <input
-              class="text-black w-full"
-              :placeholder="field.placeholder"
-              type="text"
-              :value="foodItem[field.name as keyof typeof foodItem]"
-              @input="updateResolver($event, field.name, foodItem.id)"
-            />
-          </div>
+            <!--
+              there is an issue with tailwind tree shaking when setting dynamic css
+              to fix: https://stackoverflow.com/questions/72356953/how-to-use-dynamic-class-of-tailwindcss-like-this-in-project-of-vue3-and-vite
+            -->
+            <div v-for="(field, fieldIndex) in fields" :key="'updateField'+fieldIndex"
+              :class="'col-span-'+field.size"
+            >
+              <input
+                :placeholder="field.placeholder"
+                type="text"
+                :value="foodItem[field.name as keyof typeof foodItem]"
+                @input="updateResolver($event, field.name, foodItem.id)"
+              />
+            </div>
 
-          <button class="ml-3 col-span-1"
-            @click="deleteResolver(foodItem.id)"
-          >
-            X
-          </button>
-        </li>
+            <button @click="deleteResolver(foodItem.id)">
+              X
+            </button>
+          </li>
 
-        <li class="grid grid-cols-12 mt-2">
-          <div class="col-span-3 text-xs"></div>
+          <li class="daily-list--new">
+            <div class="spacer"></div>
 
-          <div v-for="(field, fieldIndex) in fields" :key="'createField'+fieldIndex"
-            :class="'col-span-'+field.size"
-          >
-            <input
-              class="text-black w-full"
-              :placeholder="field.placeholder"
-              type="text"
-              :value="food[field.name as keyof typeof food]"
-              @input="createResolver($event, field.name)"
-            />
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    
-    <DailyList
-      :dailyItem="food"
-      :dailyItems="foods"
-      :fields="fields"
-      @create="createFood"
-      @update="updateFood"
-      @delete="deleteFood"
-    />
-    
+            <div v-for="(field, fieldIndex) in fields" :key="'createField'+fieldIndex"
+              :class="'col-span-'+field.size"
+            >
+              <input
+                :placeholder="field.placeholder"
+                type="text"
+                :value="food[field.name as keyof typeof food]"
+                @input="createResolver($event, field.name)"
+              />
+            </div>
+          </li>
+        </ul>
+      </div>
+    </DailyListStyles>
   </main>
 </template>
 
 <script lang="ts">
-import { toRaw } from 'vue'
-
 // @ts-ignore
 // fix https://stackoverflow.com/a/55576119
 import { debounce } from 'lodash'
-import DailyList from '../slots/DailyList.vue'
-
-import {
-  type ISelfCare,
-  SelfCare
-} from '../models/ISelfCare'
+import { toRaw } from 'vue'
+import DailyListStyles from '../slots/DailyListStyles.vue'
 
 import {
   getFoods,
   createFood,
   updateFood,
 } from '../datasources/localstorage'
-
+import {
+  type ISelfCare,
+  SelfCare
+} from '../models/ISelfCare'
 
 interface IFood extends ISelfCare {
   calorie?: string
@@ -92,11 +74,11 @@ class Food extends SelfCare {
 
 export default {
   components: {
-    DailyList
+    DailyListStyles,
   },
   data() {
     return {
-      idLookup: {} as any,
+      //idLookup: {} as any,
       food: {} as IFood,
       foods: [] as IFood[],
       fields: [
@@ -117,9 +99,6 @@ export default {
   mounted() {
     this.food = new Food()
 
-    console.log('INTERFACE:: ', {} as IFood)
-    console.log('CLASS w Default values:: ', new Food())
-
     getFoods().then(res => {
       this.foods = res
     })
@@ -129,9 +108,6 @@ export default {
   },
 
   methods: {
-    createFood(val: object[]) {
-
-    },
     createResolver($event: any, field: string) {
       let val = $event.target.value
       this.food[field as keyof typeof this.food] = val
@@ -141,9 +117,6 @@ export default {
       createFood(this.foods)
     },
 
-    updateFood(val: object[]) {
-      createFood(this.foods)
-    },
     updateResolver($event: any, field: string, id: any) {
       let val = $event.target.value
       let existFood = toRaw(this.foods).findIndex((i: IFood) => i.id === id)
@@ -167,9 +140,6 @@ export default {
       updateFood(this.foods)
     },
 
-    deleteFood(val: object[]) {
-
-    },
     deleteResolver(id: any) {
       let existFood = toRaw(this.foods).findIndex((i: IFood) => i.id === id)
       this.foods.splice(existFood, 1)
