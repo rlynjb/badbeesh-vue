@@ -18,10 +18,6 @@ export default {
 
 <template>
   <main class="home-view">
-    <section class="display-board">
-      <h3 class="subtitle">Total Daily Calories</h3>
-    </section>
-
     <section class="grid grid-cols-4 gap-4">
       <div class="col-span-4">
         <h3 class="subtitle">Food diary</h3>
@@ -33,7 +29,7 @@ export default {
 
 <style lang="postcss" scoped>
 .home-view {
-  @apply container w-6/12;
+  @apply container;
 }
 .home-view section {
   @apply mb-4 p-4;
