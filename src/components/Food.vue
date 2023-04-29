@@ -59,6 +59,7 @@ import {
   type ISelfCare,
   SelfCare
 } from '../models/ISelfCare'
+
 import { useTotalDailyCalorie } from '../composables/useTotalDailyCalorie'
 
 import {
@@ -82,7 +83,6 @@ export default {
   },
   data() {
     return {
-      //idLookup: {} as any,
       name: 'food',
       item: {} as IFood,
       items: [] as IFood[],
@@ -98,6 +98,7 @@ export default {
           size: '3',
         }
       ],
+      //idLookup: {} as any,
     }
   },
 

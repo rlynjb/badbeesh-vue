@@ -34,18 +34,12 @@ export default {
 }
 
 .daily-list--style-scope button {
-  @apply ml-3 col-span-1;
+  @apply ml-3 col-span-1 text-neutral-400;
   font-weight: 800;
-  color: #868686;
 }
 
 .daily-list--style-scope input[type='text'] {
-  @apply text-black w-full;
-
+  @apply text-neutral-400 w-full bg-neutral-800 border border-neutral-900 rounded;
   font-size: 0.9em;
-  background-color: #1f1f1f;
-  color: #868686;
-  border: 1px solid #181818;
-  border-radius: 5px;
 }
 </style>

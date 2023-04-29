@@ -32,9 +32,7 @@ export default {
   @apply container;
 }
 .home-view section {
-  @apply mb-4 p-4;
-  border: 1px solid #2a2a2a;
-  border-radius: 10px;
+  @apply mb-4 p-4 border border-neutral-700 rounded;
 }
 .home-view .subtitle {
   @apply text-xl mb-4;
