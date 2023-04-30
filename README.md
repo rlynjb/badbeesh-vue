@@ -1,3 +1,18 @@
+# NOTES
+## Front end architectures
+- Classic approach
+- https://javascript.plainenglish.io/frontend-architectures-classic-approach-no-architecture-d3c839e46403
+- Simple Modular
+- https://javascript.plainenglish.io/frontend-architectures-simple-modular-approach-7f3b3efe0ecd
+- Featured Slice
+- https://blog.bitsrc.io/understand-the-most-reliable-frontend-architecture-c8578e3166b
+- How to build a Component Design System
+- https://blog.bitsrc.io/how-we-build-our-design-system-15713a1f1833
+- 7 Best Practices for Implementing a Micro Frontend Architecture
+- https://blog.bitsrc.io/7-best-practices-for-implementing-a-micro-frontend-architecture-36cd39a9046
+
+
+
 # badbeesh
 
 This template should help get you started developing with Vue 3 in Vite.
