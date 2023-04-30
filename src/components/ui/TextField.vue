@@ -1,10 +1,9 @@
-import { configDefaults } from 'vitest/config';
 <template>
   <input
     :placeholder="placeholder"
     type="text"
-    :value="foodItem[field.name as keyof typeof foodItem]"
-    @input="updateResolver($event, field.name, foodItem.id)"
+    :value="value"
+    @input="update"
   />
 </template>
 
@@ -17,8 +16,15 @@ export default {
       default: '',
     },
     value: {
-      type: String,
+      type: [String, Number],
       default: '',
+    },
+  },
+
+  methods: {
+    update(event: any) {
+      let value = event.target.value
+      this.$emit('update', value)
     },
   },
 }

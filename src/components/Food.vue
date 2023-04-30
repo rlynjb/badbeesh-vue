@@ -16,11 +16,10 @@
             <div v-for="(field, fieldIndex) in fields" :key="'updateField'+fieldIndex"
               :class="'col-span-'+field.size"
             >
-              <input
+              <TextField
                 :placeholder="field.placeholder"
-                type="text"
                 :value="foodItem[field.name as keyof typeof foodItem]"
-                @input="updateResolver($event, field.name, foodItem.id)"
+                @update="updateResolver($event, field.name, foodItem.id)"
               />
             </div>
 
@@ -35,9 +34,8 @@
             <div v-for="(field, fieldIndex) in fields" :key="'createField'+fieldIndex"
               :class="'col-span-'+field.size"
             >
-              <input
+              <TextField
                 :placeholder="field.placeholder"
-                type="text"
                 :value="item[field.name as keyof typeof item]"
                 @input="createResolver($event, field.name)"
               />
@@ -54,7 +52,10 @@
 // fix https://stackoverflow.com/a/55576119
 import { debounce } from 'lodash'
 import { toRaw } from 'vue'
-import DailyListStyles from '../slots/DailyListStyles.vue'
+
+import TextField from '../components/ui/TextField.vue'
+import DailyListStyles from '../components/widgets/DailyListStyles.vue'
+
 import {
   type ISelfCare,
   SelfCare
@@ -80,6 +81,7 @@ let { calculateCalories, totalCalories } = useTotalDailyCalorie()
 export default {
   components: {
     DailyListStyles,
+    TextField,
   },
   data() {
     return {
@@ -131,7 +133,7 @@ export default {
     },
 
     updateResolver($event: any, field: string, id: any) {
-      let val = $event.target.value
+      let val = $event
       let existFood = toRaw(this.items).findIndex((i: IFood) => i.id === id)
       this.items[existFood][field as keyof typeof this.item] = val
 
