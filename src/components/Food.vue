@@ -23,9 +23,10 @@
               />
             </div>
 
-            <button @click="deleteResolver(foodItem.id)">
-              X
-            </button>
+            <ButtonText
+              text="X"
+              @click="deleteResolver(foodItem.id)"
+            />
           </li>
 
           <li class="daily-list--new">
@@ -54,6 +55,7 @@ import { debounce } from 'lodash'
 import { toRaw } from 'vue'
 
 import TextField from '../components/ui/TextField.vue'
+import ButtonText from '../components/ui/ButtonText.vue'
 import DailyListStyles from '../components/widgets/DailyListStyles.vue'
 
 import {
@@ -82,6 +84,7 @@ export default {
   components: {
     DailyListStyles,
     TextField,
+    ButtonText,
   },
   data() {
     return {
