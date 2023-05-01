@@ -19,7 +19,7 @@
               <TextField
                 :placeholder="field.placeholder"
                 :value="foodItem[field.name as keyof typeof foodItem]"
-                @update="updateResolver($event, field.name, foodItem.id)"
+                @input="updateResolver($event, field.name, foodItem.id)"
               />
             </div>
 
@@ -122,21 +122,24 @@ export default {
     })
 
     // ref: https://stackoverflow.com/a/75374781
-    this.createResolver = debounce(this.createResolver, 3000)
+    this.submitCreateFood = debounce(this.submitCreateFood, 3000)
   },
 
   methods: {
     createResolver($event: any, field: string) {
       let val = $event.target.value
       this.item[field as keyof typeof this.item] = val
+      this.submitCreateFood()
+    },
+
+    submitCreateFood() {
       this.items.push(toRaw(this.item))
       this.item = new DefaultValue()
-
       createFood(this.items)
     },
 
     updateResolver($event: any, field: string, id: any) {
-      let val = $event
+      let val = $event.target.value
       let existFood = toRaw(this.items).findIndex((i: IFood) => i.id === id)
       this.items[existFood][field as keyof typeof this.item] = val
 

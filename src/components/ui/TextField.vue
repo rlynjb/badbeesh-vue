@@ -2,8 +2,6 @@
   <input
     :placeholder="placeholder"
     type="text"
-    :value="value"
-    @input="update"
   />
 </template>
 
@@ -14,17 +12,6 @@ export default {
     placeholder: {
       type: String,
       default: '',
-    },
-    value: {
-      type: [String, Number],
-      default: '',
-    },
-  },
-
-  methods: {
-    update(event: any) {
-      let value = event.target.value
-      this.$emit('update', value)
     },
   },
 }
