@@ -12,19 +12,17 @@ export default {
   },
 }
 
-const Template = args => ({
+const Template = placeholder => ({
   components: { TextField },
   setup() {
-    return { args, ...actionsData };
+    return { placeholder };
   },
   template: `
     <TextField
-      :placeholder="args.placeholder"
+      :placeholder="placeholder"
     />
     `,
 })
 
 export const Default = Template.bind({})
-Default.args = {
-  placeholder: 'kirby'
-}
+Default.placeholder = 'kirby'

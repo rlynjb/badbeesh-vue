@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/vue3";
+import { withThemeByDataAttribute } from '@storybook/addon-styling';
 
 const preview: Preview = {
   parameters: {
@@ -11,5 +12,16 @@ const preview: Preview = {
     },
   },
 };
+
+export const decorators = [
+  withThemeByDataAttribute({
+    themes: {
+      light: 'light',
+      dark: 'dark',
+    },
+    defaultTheme: 'dark',
+    attributeName: 'data-mode',
+  }),
+];
 
 export default preview;

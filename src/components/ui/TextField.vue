@@ -11,7 +11,7 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: '',
+      default: 'field name',
     },
   },
 }
@@ -21,5 +21,6 @@ export default {
 input[type='text'] {
   @apply text-neutral-400 w-full bg-neutral-800 border border-neutral-900 rounded;
   font-size: 0.9em;
+  min-height: 2em;
 }
 </style>
