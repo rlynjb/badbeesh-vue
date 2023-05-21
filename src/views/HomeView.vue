@@ -7,14 +7,6 @@ export default {
     Food,
     Workout,
   },
-  data() {
-    return {
-    }
-  },
-
-  methods: {
-
-  },
 }
 </script>
 

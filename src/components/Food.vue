@@ -4,9 +4,9 @@
     <DailyListStyles :name="name">
       <div v-if="fields.length" class="daily-list-container">
         <ul class="daily-list-ul">
-          <li v-for="(foodItem, foodIndex) in items" :key="'food'+foodIndex">
+          <li v-for="(item, index) in items" :key="name+index">
             <div class="daily-list--timestamp">
-              {{ convertTimestamp(foodItem.timestamp) }}
+              {{ convertTimestamp(item.timestamp) }}
             </div>
 
             <!--
@@ -18,14 +18,14 @@
             >
               <TextField
                 :placeholder="field.placeholder"
-                :value="foodItem[field.name as keyof typeof foodItem]"
-                @input="updateResolver($event, field.name, foodItem.id)"
+                :value="item[field.name as keyof typeof item]"
+                @input="updateResolver($event, field.name, item.id)"
               />
             </div>
 
             <ButtonText
               text="X"
-              @click="deleteResolver(foodItem.id)"
+              @click="deleteResolver(item.id)"
             />
           </li>
 
@@ -142,8 +142,8 @@ export default {
 
     updateResolver($event: any, field: string, id: any) {
       let val = $event.target.value
-      let existFood = toRaw(this.items).findIndex((i: IFood) => i.id === id)
-      this.items[existFood][field as keyof typeof this.item] = val
+      let existItem = toRaw(this.items).findIndex((i: IFood) => i.id === id)
+      this.items[existItem][field as keyof typeof this.item] = val
 
       /*
         TODO
@@ -154,7 +154,7 @@ export default {
         this will automatically delete the item if all fields are empty.
       */
       /*
-      if (this.foods[existFood][field as keyof typeof this.food] === "") {
+      if (this.foods[existItem][field as keyof typeof this.food] === "") {
         this.idLookup[id as keyof typeof this.idLookup] = 1
         debugger
       }
@@ -166,8 +166,8 @@ export default {
     },
 
     deleteResolver(id: any) {
-      let existFood = toRaw(this.items).findIndex((i: IFood) => i.id === id)
-      this.items.splice(existFood, 1)
+      let existItem = toRaw(this.items).findIndex((i: IFood) => i.id === id)
+      this.items.splice(existItem, 1)
 
       updateFood(this.items).then(r => {
         calculateCalories(this.items)
