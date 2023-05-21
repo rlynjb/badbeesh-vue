@@ -135,7 +135,9 @@ export default {
     submitCreateFood() {
       this.items.push(toRaw(this.item))
       this.item = new DefaultValue()
-      createFood(this.items)
+      createFood(this.items).then(r => {
+        calculateCalories(this.items)
+      })
     },
 
     updateResolver($event: any, field: string, id: any) {
@@ -157,16 +159,19 @@ export default {
         debugger
       }
       */
-      
       updateFood(this.items)
-        .then(r => calculateCalories(this.items))
+        .then(r => {
+          calculateCalories(this.items)
+        })
     },
 
     deleteResolver(id: any) {
       let existFood = toRaw(this.items).findIndex((i: IFood) => i.id === id)
       this.items.splice(existFood, 1)
 
-      updateFood(this.items)
+      updateFood(this.items).then(r => {
+        calculateCalories(this.items)
+      })
     },
 
     convertTimestamp(val?: number) {
