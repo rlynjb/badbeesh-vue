@@ -1,9 +1,11 @@
 <script lang="ts">
 import Food from '../components/Food.vue'
+import Workout from '../components/Workout.vue'
 
 export default {
   components: {
-    Food
+    Food,
+    Workout,
   },
   data() {
     return {
@@ -20,9 +22,16 @@ export default {
   <main class="home-view">
     <section class="grid grid-cols-4 gap-4">
       <div class="col-span-4">
-        <h3 class="subtitle">Food diary</h3>
+        <h3 class="subtitle">Food Diary</h3>
       </div>
       <Food class="col-span-4" />
+    </section>
+
+    <section class="grid grid-cols-4 gap-4">
+      <div class="col-span-4">
+        <h3 class="subtitle">Workout Diary</h3>
+      </div>
+      <Workout class="col-span-4" />
     </section>
   </main>
 </template>
