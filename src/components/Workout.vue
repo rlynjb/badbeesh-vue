@@ -88,17 +88,17 @@ export default {
         {
           name: 'name',
           placeholder: 'workout name',
-          size: '7',
+          size: '5',
         },
         {
           name: 'set',
           placeholder: 'set',
-          size: '1',
+          size: '2',
         },
         {
           name: 'rep',
           placeholder: 'rep',
-          size: '1',
+          size: '2',
         }
       ],
     }
