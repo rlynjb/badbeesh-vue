@@ -194,7 +194,7 @@ export default {
 <style>
 input[readonly] {
   padding-top: 0;
-    padding-bottom: 0;
-    background-color: #181818 !important;
+  padding-bottom: 0;
+  background-color: #181818 !important;
 }
 </style>

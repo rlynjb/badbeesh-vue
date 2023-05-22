@@ -15,6 +15,7 @@
                 :placeholder="field.placeholder"
                 :value="item[field.name as keyof typeof item]"
                 @input="updateResolver($event, field.name, item.id)"
+                :readonly="checkIfToday(item)"
               />
             </div>
 
@@ -147,6 +148,22 @@ export default {
       // fix: https://stackoverflow.com/a/57062363
       return new Date(val!).toLocaleString()
     },
+
+    checkIfToday(item: any) {
+      let todaysDate = new Date().toLocaleDateString()
+
+      return new Date(item.timestamp).toLocaleDateString('en-US') === todaysDate
+        ? false
+        : true
+    },
   },
 }
 </script>
+
+<style>
+input[readonly] {
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: #181818 !important;
+}
+</style>
